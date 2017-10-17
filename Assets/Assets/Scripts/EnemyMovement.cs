@@ -30,7 +30,6 @@ public class EnemyMovement : MonoBehaviour {
         if (Vector3.Distance(transform.position, target) < 10)
         {
             GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawnerManager>().SpawnEnemy();
-            Debug.Log("TAWFD");
             Destroy(gameObject);
         }
     }

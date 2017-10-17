@@ -7,7 +7,7 @@ PlayerSettings:
   productGUID: e759ae6adf6e2634d9d6059fbf30582a
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 3
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -145,9 +145,10 @@ PlayerSettings:
   m_ColorGamuts: 00000000
   targetPixelDensity: 0
   resolutionScalingMode: 0
-  androidSupportedAspectRatio: 1
+  androidSupportedAspectRatio: 0
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Android: com.Apponnaise.T34
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
