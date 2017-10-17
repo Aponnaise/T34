@@ -4402,8 +4402,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0153547cb54dc2b40b0bd62ac1c44934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  superSpeed: 4
-  speed: 27
+  superSpeed: 2
+  speed: 12
   Up: {fileID: 21300000, guid: f03646c540aa0d54d92adcf2453ebc6b, type: 3}
   Right: {fileID: 21300000, guid: 827bf808786af5b449782ea61d0326b0, type: 3}
   Down: {fileID: 21300000, guid: 38da2398e39e9904c976b93f1bcfc825, type: 3}
