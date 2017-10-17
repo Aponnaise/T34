@@ -49,21 +49,21 @@ public class PlayerBahav : MonoBehaviour {
         if(directionX < 0) {  //LEFT
             if(directionY < 0) {  //DOWN
                 if(directionY <= directionX) {  //DOWN
-                    Direction(false, false, -directionY / -directionX >= 3.3, false, false, false, false, -directionY / -directionX < 3.3);
+                    Direction(false, false, -directionY / -directionX >= 2.5, false, false, false, false, -directionY / -directionX < 2.5);
                     if(-directionY / -directionX >= 2.5) spriteHelp = "Down";
                     if(-directionY / -directionX < 2.5) spriteHelp = "DownLeft";
                 } else {  //LEFT
-                    Direction(false, false, false, -directionY / -directionX < 0.33, false, false, false, -directionY / -directionX >= 0.33);
+                    Direction(false, false, false, -directionY / -directionX < 0.4, false, false, false, -directionY / -directionX >= 0.4);
                     if(-directionY / -directionX < 0.4) spriteHelp = "Left";
                     if(-directionY / -directionX >= 0.4) spriteHelp = "DownLeft";
                 }
             } else {  //UP
                 if(directionY >= -directionX) {  //UP
-                    Direction(directionY / -directionX >= 3.3, false, false, false, directionY / -directionX < 3.3, false, false, false);
+                    Direction(directionY / -directionX >= 2.5, false, false, false, directionY / -directionX < 2.5, false, false, false);
                     if(directionY / -directionX >= 2.5) spriteHelp = "Up";
                     if(directionY / -directionX < 2.5) spriteHelp = "UpLeft";
                 } else {  //LEFT
-                    Direction(false, false, false, directionY / -directionX < 0.33, directionY / -directionX >= 0.33, false, false, false);
+                    Direction(false, false, false, directionY / -directionX < 0.4, directionY / -directionX >= 0.4, false, false, false);
                     if(directionY / -directionX < 0.4) spriteHelp = "Left";
                     if(directionY / -directionX >= 0.4) spriteHelp = "UpLeft";
                 }
@@ -71,21 +71,21 @@ public class PlayerBahav : MonoBehaviour {
         } else if(directionX > 0) {  //RIGHT
             if(directionY < 0) {  //DOWN
                 if(-directionY < directionX) {  //RIGHT
-                    Direction(false, -directionY / directionX < 0.33, false, false, false, false, -directionY / directionX >= 0.33, false);
+                    Direction(false, -directionY / directionX < 0.4, false, false, false, false, -directionY / directionX >= 0.4, false);
                     if(-directionY / directionX < 0.4) spriteHelp = "Right";
                     if(-directionY / directionX >= 0.4) spriteHelp = "DownRight";
                 } else {  //DOWN
-                    Direction(false, false, -directionY / directionX >= 3.3, false, false, false, -directionY / directionX < 3.3, false);
+                    Direction(false, false, -directionY / directionX >= 2.5, false, false, false, -directionY / directionX < 2.5, false);
                     if(-directionY / directionX >= 2.5) spriteHelp = "Down";
                     if(-directionY / directionX < 2.5) spriteHelp = "DownRight";
                 }
             } else {  //UP
                 if(directionY >= directionX) {  //UP
-                    Direction(directionY / directionX >= 3.3, false, false, false, false, directionY / directionX < 3.3, false, false);
+                    Direction(directionY / directionX >= 2.5, false, false, false, false, directionY / directionX < 2.5, false, false);
                     if(directionY / directionX >= 2.5) spriteHelp = "Up";
                     if(directionY / directionX < 2.5) spriteHelp = "UpRight";
                 } else {  //RIGHT
-                    Direction(false, directionY / directionX < 0.33, false, false, false, directionY / directionX >= 0.33, false, false);
+                    Direction(false, directionY / directionX < 0.4, false, false, false, directionY / directionX >= 0.4, false, false);
                     if(directionY / directionX < 0.4) spriteHelp = "Right";
                     if(directionY / directionX >= 0.4) spriteHelp = "UpRight";
                 }
