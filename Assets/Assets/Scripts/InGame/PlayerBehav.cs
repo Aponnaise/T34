@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerBahav : MonoBehaviour {
+public class PlayerBehav : MonoBehaviour {
 
     public float superSpeed = 4f;
     public float speed = 20;

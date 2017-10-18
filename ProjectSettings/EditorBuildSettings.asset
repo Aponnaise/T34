@@ -4,4 +4,16 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Assets/Scenes/MainMenu.unity
+    guid: 4a04104ba3450d4419dc925ef00538f5
+  - enabled: 1
+    path: Assets/Assets/Scenes/LevelMenu.unity
+    guid: 2e0be210b1667dd48ac0a0b176ae38f5
+  - enabled: 1
+    path: Assets/Assets/Scenes/OptionsMenu.unity
+    guid: 63734789c10aadc4fbbc84c83435a598
+  - enabled: 1
+    path: Assets/Assets/Scenes/Frankfurt.unity
+    guid: e1e8b3d7e89cb754b89ec73ca4485253
