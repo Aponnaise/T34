@@ -20,20 +20,46 @@ public class EnemyMovement : MonoBehaviour {
     public Sprite UpRight;
     public Sprite DownRight;
     public Sprite DownLeft;
+    private bool isFinalTarget = false;
 
-    private void Start()
+    private int ClassID = 0;
+
+
+    private void Awake()
     {
+        ClassID = Random.Range(0, 4);
         animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
-        spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+        spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();   
     }
 
-    public void MoveToTarget (Vector3 position, Vector3 destination) {
+    public void MoveToTarget (Vector3 position, GameObject targetObject) {
+        if (targetObject.tag == "Spawner")
+        {
+            isFinalTarget = true;
+            targetObject = targetObject.transform.GetChild(Random.Range(0, 3)).gameObject;
+        }
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
         agent.Warp(position);
-        agent.speed = 7 + Mathf.Pow(Random.Range(0f, 3f), 2f);
-        target = destination;
-        agent.destination = destination;
+
+        switch (ClassID)
+        {
+            case 0:
+                agent.speed = 2 + Mathf.Pow(Random.Range(0f, 2f), 2f);
+                break;
+            case 1:
+                agent.speed = 5 + Mathf.Pow(Random.Range(0f, 2f), 2f);
+                break;
+            case 2:
+                agent.speed = 7 + Mathf.Pow(Random.Range(0f, 3f), 2f);
+                break;
+            default:
+                agent.speed = 7 + Mathf.Pow(Random.Range(0f, 4f), 2f);
+                break;
+        }
+        
+        target = targetObject.transform.position;
+        agent.destination = targetObject.transform.position;
         StartCoroutine(setTarget());
 	}
 
@@ -43,13 +69,30 @@ public class EnemyMovement : MonoBehaviour {
         agent.destination = target; 
     }
 
+    IEnumerator waitAtStand()
+    {
+        yield return new WaitForSeconds(Random.Range(5f,15f));
+        StartCoroutine(setTarget());
+    }
+
     private void FixedUpdate()
     {
         if (Vector3.Distance(transform.position, target) < 10)
         {
-            GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawnerManager>().SpawnEnemy();
-            Destroy(gameObject);
+            if (isFinalTarget)
+            {
+                GameObject.FindGameObjectWithTag("EnemySpawner").GetComponent<EnemySpawnerManager>().SpawnEnemy();
+                Destroy(gameObject);
+            } else
+            {
+                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount)).GetChild(Random.Range(0,2)).position;
+                isFinalTarget = true;
+                StartCoroutine(waitAtStand());
+            }
+            
         }
+
+        #region Animation
 
         position2 = new Vector2(transform.position.x, transform.position.z);
         directionX = position2.x - position1.x;
@@ -136,6 +179,9 @@ public class EnemyMovement : MonoBehaviour {
             if (spriteHelp == "DownLeft") spriteRenderer.sprite = DownLeft;
         }
         position1 = new Vector2(transform.position.x, transform.position.z);
+
+#endregion
+
     }
 
     void Direction(bool bool1, bool bool2, bool bool3, bool bool4, bool bool5, bool bool6, bool bool7, bool bool8)

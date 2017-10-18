@@ -6,6 +6,7 @@ public class EnemySpawnerManager : MonoBehaviour {
 
     public GameObject enemy;
     private GameObject lastInstantiated;
+    private int randomInt;
 
     private void Start()
     {
@@ -15,7 +16,7 @@ public class EnemySpawnerManager : MonoBehaviour {
 
     IEnumerator SpawnEnemysStart()
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 100; i++)
         {
             SpawnEnemy();
             yield return new WaitForSeconds(0.5f);
@@ -31,7 +32,8 @@ public class EnemySpawnerManager : MonoBehaviour {
 
     public void SpawnEnemy()
     {
-        lastInstantiated = Instantiate(enemy,transform.GetChild(Random.Range(0,transform.childCount)).GetChild(Random.Range(0,3)).position, Quaternion.identity);
-        lastInstantiated.GetComponent<EnemyMovement>().MoveToTarget(transform.GetChild(Random.Range(0, transform.childCount - 1)).GetChild(Random.Range(0, 3)).position, transform.GetChild(Random.Range(0, transform.childCount - 1)).GetChild(Random.Range(0, 3)).position);
+        randomInt = Random.Range(0, 2);
+        lastInstantiated = Instantiate(enemy, Vector3.zero, Quaternion.identity);
+        lastInstantiated.GetComponent<EnemyMovement>().MoveToTarget(transform.GetChild(0).GetChild(Random.Range(0, transform.GetChild(0).childCount - 1)).GetChild(Random.Range(0, 3)).position, transform.GetChild(randomInt).GetChild(Random.Range(0, transform.GetChild(randomInt).childCount - 1)).gameObject);
     }
 }

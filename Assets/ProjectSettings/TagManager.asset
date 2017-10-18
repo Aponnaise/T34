@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Fire
   - EnemySpawner
+  - Stand
+  - Spawner
   layers:
   - Default
   - TransparentFX
