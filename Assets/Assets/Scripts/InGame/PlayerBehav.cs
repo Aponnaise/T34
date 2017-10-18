@@ -21,11 +21,14 @@ public class PlayerBehav : MonoBehaviour {
     float directionY;
     string spriteHelp;
     bool isSuperSpeed = false;
-    bool onLoadingZone;
+    bool onLoadingZone = true;
+    Vector3 leaveDirection;
 
     Vector3 startingPosition = new Vector3(0, 5.5f, -72);
 
     bool isInGame = true;
+    bool isInSpawnWalk = false;
+    public bool leaveWalk = false;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -38,13 +41,29 @@ public class PlayerBehav : MonoBehaviour {
         startingPosition.y = 5.5f;
         transform.position = startingPosition;
         onLoadingZone = true;
+        StartCoroutine(spawnWalk());
+    }
+
+    IEnumerator spawnWalk()
+    {
+        isInSpawnWalk = true;
+        yield return new WaitForSeconds(1f);
+        isInSpawnWalk = false;
     }
 
     private void FixedUpdate() {
 
 #region Movement
         Vector3 moveVec = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 0, CrossPlatformInputManager.GetAxis("Vertical"));
-        if(!isSuperSpeed && !Input.GetKey(KeyCode.L)) {
+        if (isInSpawnWalk)
+        {
+            moveVec = DirectionToVector(GameObject.FindGameObjectWithTag("LoadingZoneManager").transform.GetChild((int)LoadingZoneManager.loadingZoneId).GetComponent<LoadingZoneValues>().direction);
+        }
+        if (leaveWalk)
+        {
+            moveVec = leaveDirection;
+        }
+        if (!isSuperSpeed && !Input.GetKey(KeyCode.L)) {
             isSuperSpeed = CrossPlatformInputManager.GetButtonDown("BuSuperSpeed");
             GetComponent<Rigidbody>().velocity = moveVec.normalized * speed; 
         } else {
@@ -58,51 +77,63 @@ public class PlayerBehav : MonoBehaviour {
         directionX = position2.x - position1.x; 
         directionY = position2.y - position1.y;
         animator.enabled = true;
-       
-        if(directionX < 0) {  //LEFT
-            if(directionY < 0) {  //DOWN
-                if(directionY <= directionX) {  //DOWN
+
+        if (directionX < 0) {  //LEFT
+            if (directionY < 0) {  //DOWN
+                if (directionY <= directionX) {  //DOWN
                     Direction(false, false, -directionY / -directionX >= 2.5, false, false, false, false, -directionY / -directionX < 2.5);
-                    if(-directionY / -directionX >= 2.5) spriteHelp = "Down";
-                    if(-directionY / -directionX < 2.5) spriteHelp = "DownLeft";
+                    if (-directionY / -directionX >= 2.5) spriteHelp = "Down";
+                    if (-directionY / -directionX < 2.5) spriteHelp = "DownLeft";
                 } else {  //LEFT
                     Direction(false, false, false, -directionY / -directionX < 0.4, false, false, false, -directionY / -directionX >= 0.4);
-                    if(-directionY / -directionX < 0.4) spriteHelp = "Left";
-                    if(-directionY / -directionX >= 0.4) spriteHelp = "DownLeft";
+                    if (-directionY / -directionX < 0.4) spriteHelp = "Left";
+                    if (-directionY / -directionX >= 0.4) spriteHelp = "DownLeft";
                 }
             } else {  //UP
-                if(directionY >= -directionX) {  //UP
+                if (directionY >= -directionX) {  //UP
                     Direction(directionY / -directionX >= 2.5, false, false, false, directionY / -directionX < 2.5, false, false, false);
-                    if(directionY / -directionX >= 2.5) spriteHelp = "Up";
-                    if(directionY / -directionX < 2.5) spriteHelp = "UpLeft";
+                    if (directionY / -directionX >= 2.5) spriteHelp = "Up";
+                    if (directionY / -directionX < 2.5) spriteHelp = "UpLeft";
                 } else {  //LEFT
                     Direction(false, false, false, directionY / -directionX < 0.4, directionY / -directionX >= 0.4, false, false, false);
-                    if(directionY / -directionX < 0.4) spriteHelp = "Left";
-                    if(directionY / -directionX >= 0.4) spriteHelp = "UpLeft";
-                }
-            } 
-        } else if(directionX > 0) {  //RIGHT
-            if(directionY < 0) {  //DOWN
-                if(-directionY < directionX) {  //RIGHT
-                    Direction(false, -directionY / directionX < 0.4, false, false, false, false, -directionY / directionX >= 0.4, false);
-                    if(-directionY / directionX < 0.4) spriteHelp = "Right";
-                    if(-directionY / directionX >= 0.4) spriteHelp = "DownRight";
-                } else {  //DOWN
-                    Direction(false, false, -directionY / directionX >= 2.5, false, false, false, -directionY / directionX < 2.5, false);
-                    if(-directionY / directionX >= 2.5) spriteHelp = "Down";
-                    if(-directionY / directionX < 2.5) spriteHelp = "DownRight";
-                }
-            } else {  //UP
-                if(directionY >= directionX) {  //UP
-                    Direction(directionY / directionX >= 2.5, false, false, false, false, directionY / directionX < 2.5, false, false);
-                    if(directionY / directionX >= 2.5) spriteHelp = "Up";
-                    if(directionY / directionX < 2.5) spriteHelp = "UpRight";
-                } else {  //RIGHT
-                    Direction(false, directionY / directionX < 0.4, false, false, false, directionY / directionX >= 0.4, false, false);
-                    if(directionY / directionX < 0.4) spriteHelp = "Right";
-                    if(directionY / directionX >= 0.4) spriteHelp = "UpRight";
+                    if (directionY / -directionX < 0.4) spriteHelp = "Left";
+                    if (directionY / -directionX >= 0.4) spriteHelp = "UpLeft";
                 }
             }
+        } else if (directionX > 0) {  //RIGHT
+            if (directionY < 0) {  //DOWN
+                if (-directionY < directionX) {  //RIGHT
+                    Direction(false, -directionY / directionX < 0.4, false, false, false, false, -directionY / directionX >= 0.4, false);
+                    if (-directionY / directionX < 0.4) spriteHelp = "Right";
+                    if (-directionY / directionX >= 0.4) spriteHelp = "DownRight";
+                } else {  //DOWN
+                    Direction(false, false, -directionY / directionX >= 2.5, false, false, false, -directionY / directionX < 2.5, false);
+                    if (-directionY / directionX >= 2.5) spriteHelp = "Down";
+                    if (-directionY / directionX < 2.5) spriteHelp = "DownRight";
+                }
+            } else {  //UP
+                if (directionY >= directionX) {  //UP
+                    Direction(directionY / directionX >= 2.5, false, false, false, false, directionY / directionX < 2.5, false, false);
+                    if (directionY / directionX >= 2.5) spriteHelp = "Up";
+                    if (directionY / directionX < 2.5) spriteHelp = "UpRight";
+                } else {  //RIGHT
+                    Direction(false, directionY / directionX < 0.4, false, false, false, directionY / directionX >= 0.4, false, false);
+                    if (directionY / directionX < 0.4) spriteHelp = "Right";
+                    if (directionY / directionX >= 0.4) spriteHelp = "UpRight";
+                }
+            }
+        } else if (directionX == 0 && directionY != 0)
+        {
+            if (directionY > 0)
+            {
+                Direction(directionY / directionX >= 2.5, false, false, false, false, directionY / directionX < 2.5, false, false);
+                spriteHelp = "Up";
+            } else
+            {
+                Direction(false, false, -directionY / directionX >= 2.5, false, false, false, -directionY / directionX < 2.5, false);
+                spriteHelp = "Down";
+            }
+
         } else {  //NO MOVEMENT
             Direction(false, false, false, false, false, false, false, false);
             animator.enabled = false;
@@ -133,28 +164,17 @@ public class PlayerBehav : MonoBehaviour {
             if (hit.transform.parent.tag != "LoadingZoneManager" && onLoadingZone)
             {
                 onLoadingZone = false;
-                Debug.Log(hit.transform.name);
             }
 
-            if (!onLoadingZone)
+            if (hit.transform.parent.tag == "LoadingZoneManager" && !leaveWalk)
             {
-                if (hit.transform.gameObject.name == "WestExit")
+                if (!isInSpawnWalk && Vector3.Dot(DirectionToVector(hit.transform.gameObject.GetComponent<LoadingZoneValues>().direction), moveVec) < 0)
                 {
-                    //Load West Map
-                    LoadingZoneManager.LoadScene(1, 2);
-                }
-                if (hit.transform.gameObject.name == "SouthExit2")
-                {
-                    //Load South2 Map
-                    LoadingZoneManager.LoadScene(0, 2);
+                    leaveDirection = -DirectionToVector(hit.transform.gameObject.GetComponent<LoadingZoneValues>().direction);
+                    LoadingZoneManager.LoadScene(hit.transform.gameObject.GetComponent<LoadingZoneValues>().targetId, hit.transform.gameObject.GetComponent<LoadingZoneValues>().targetScene);
                 }
             }
-
-            Debug.Log(hit.transform.name);
-            
         }
-
-
 #endregion
     }
 
@@ -180,5 +200,28 @@ public class PlayerBehav : MonoBehaviour {
         spriteRenderer.size = new Vector2(16, 10);
         transform.position = startingPosition;
         isInGame = true;
+    }
+
+    private Vector3 DirectionToVector(int directionInt)
+    {
+        switch (directionInt)
+        {
+            case 0:
+                return new Vector3(0, 0, 1);
+            case 1:
+                return new Vector3(1, 0, 1);
+            case 2:
+                return new Vector3(1, 0, 0);
+            case 3:
+                return new Vector3(1, 0, -1);
+            case 4:
+                return new Vector3(0, 0, -1);
+            case 5:
+                return new Vector3(-1, 0, -1);
+            case 6:
+                return new Vector3(-1, 0, 0);
+            default:
+                return new Vector3(-1, 0, 1);
+        }
     }
 }

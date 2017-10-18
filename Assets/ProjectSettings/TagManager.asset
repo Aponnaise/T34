@@ -10,6 +10,7 @@ TagManager:
   - Spawner
   - Gleis
   - LoadingZoneManager
+  - MobileSingleStickControl
   layers:
   - Default
   - TransparentFX
