@@ -22,7 +22,8 @@ public class EnemyMovement : MonoBehaviour {
     public Sprite DownLeft;
     private bool isFinalTarget;
 
-    private int destinationRange = 10;
+    private int destinationRange = 30;
+    private int safetyRange = 2;
 
     private int ClassID = 0;
 
@@ -82,7 +83,7 @@ public class EnemyMovement : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(transform.position, target) < destinationRange)
+        if (new Vector2(transform.position.x - target.x, transform.position.z - target.z).magnitude < destinationRange && !isFinalTarget || new Vector2(transform.position.x - target.x, transform.position.z - target.z).magnitude < safetyRange && isFinalTarget)
         {
             if (isFinalTarget)
             {

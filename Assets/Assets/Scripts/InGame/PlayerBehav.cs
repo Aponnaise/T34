@@ -176,6 +176,7 @@ public class PlayerBehav : MonoBehaviour {
             }
         }
 #endregion
+
     }
 
     void Direction(bool bool1, bool bool2, bool bool3, bool bool4, bool bool5, bool bool6, bool bool7, bool bool8) {
@@ -192,12 +193,15 @@ public class PlayerBehav : MonoBehaviour {
     private IEnumerator Die()
     {
         isInGame = false; 
-        while (spriteRenderer.size.x>0)
+        while (transform.localScale.x>0)
         {
-            spriteRenderer.size -= new Vector2(0.01f, 0.1f/16);
+            transform.localScale = transform.localScale - new Vector3(0.01f, 0.01f, 0.01f);
             yield return null;
         }
-        spriteRenderer.size = new Vector2(16, 10);
+
+            //INSERT DEATH HERE
+
+        transform.localScale = new Vector3(1,1,1);
         transform.position = startingPosition;
         isInGame = true;
     }
