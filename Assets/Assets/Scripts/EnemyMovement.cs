@@ -85,7 +85,7 @@ public class EnemyMovement : MonoBehaviour {
                 Destroy(gameObject);
             } else
             {
-                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount)).GetChild(Random.Range(0,2)).position;
+                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount-1)).GetChild(Random.Range(0,3)).position;
                 isFinalTarget = true;
                 StartCoroutine(waitAtStand());
             }
