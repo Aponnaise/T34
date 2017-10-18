@@ -21,6 +21,11 @@ public class PlayerBehav : MonoBehaviour {
     float directionY;
     string spriteHelp;
     bool isSuperSpeed = false;
+    bool onLoadingZone;
+
+    Vector3 startingPosition = new Vector3(0, 5.5f, -72);
+
+    bool isInGame = true;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -29,18 +34,26 @@ public class PlayerBehav : MonoBehaviour {
     {
         animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
         spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();
+        startingPosition = GameObject.FindGameObjectWithTag("LoadingZoneManager").transform.GetChild((int) LoadingZoneManager.loadingZoneId).position;
+        startingPosition.y = 5.5f;
+        transform.position = startingPosition;
+        onLoadingZone = true;
     }
 
     private void FixedUpdate() {
+
+#region Movement
         Vector3 moveVec = new Vector3(CrossPlatformInputManager.GetAxis("Horizontal"), 0, CrossPlatformInputManager.GetAxis("Vertical"));
-        if(!isSuperSpeed) {
+        if(!isSuperSpeed && !Input.GetKey(KeyCode.L)) {
             isSuperSpeed = CrossPlatformInputManager.GetButtonDown("BuSuperSpeed");
             GetComponent<Rigidbody>().velocity = moveVec.normalized * speed; 
         } else {
             GetComponent<Rigidbody>().velocity = moveVec.normalized * speed * superSpeed; 
             if(CrossPlatformInputManager.GetButtonUp("BuSuperSpeed")) isSuperSpeed = false;
         }
-        
+        #endregion
+
+#region Animation
         position2 = new Vector3(transform.position.x, transform.position.z);
         directionX = position2.x - position1.x; 
         directionY = position2.y - position1.y;
@@ -103,6 +116,46 @@ public class PlayerBehav : MonoBehaviour {
             if(spriteHelp == "DownLeft") spriteRenderer.sprite = DownLeft;
         }
         position1 = new Vector2(transform.position.x, transform.position.z);
+        #endregion
+
+#region PositionEvents
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position,Vector3.down,out hit, 20) && isInGame)
+        {
+            if (hit.transform.gameObject.tag == "Gleis")
+            {
+                Debug.Log("Dies");
+                //Die
+                StartCoroutine(Die());
+            }
+
+            if (hit.transform.parent.tag != "LoadingZoneManager" && onLoadingZone)
+            {
+                onLoadingZone = false;
+                Debug.Log(hit.transform.name);
+            }
+
+            if (!onLoadingZone)
+            {
+                if (hit.transform.gameObject.name == "WestExit")
+                {
+                    //Load West Map
+                    LoadingZoneManager.LoadScene(1, 2);
+                }
+                if (hit.transform.gameObject.name == "SouthExit2")
+                {
+                    //Load South2 Map
+                    LoadingZoneManager.LoadScene(0, 2);
+                }
+            }
+
+            Debug.Log(hit.transform.name);
+            
+        }
+
+
+#endregion
     }
 
     void Direction(bool bool1, bool bool2, bool bool3, bool bool4, bool bool5, bool bool6, bool bool7, bool bool8) {
@@ -114,5 +167,18 @@ public class PlayerBehav : MonoBehaviour {
         animator.SetBool("isGoingUpRight", bool6);
         animator.SetBool("isGoingDownRight", bool7);
         animator.SetBool("isGoingDownLeft", bool8);
+    }
+
+    private IEnumerator Die()
+    {
+        isInGame = false; 
+        while (spriteRenderer.size.x>0)
+        {
+            spriteRenderer.size -= new Vector2(0.01f, 0.1f/16);
+            yield return null;
+        }
+        spriteRenderer.size = new Vector2(16, 10);
+        transform.position = startingPosition;
+        isInGame = true;
     }
 }

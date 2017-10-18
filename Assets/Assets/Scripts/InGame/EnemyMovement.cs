@@ -20,7 +20,9 @@ public class EnemyMovement : MonoBehaviour {
     public Sprite UpRight;
     public Sprite DownRight;
     public Sprite DownLeft;
-    private bool isFinalTarget = false;
+    private bool isFinalTarget;
+
+    private int destinationRange = 10;
 
     private int ClassID = 0;
 
@@ -37,6 +39,9 @@ public class EnemyMovement : MonoBehaviour {
         {
             isFinalTarget = true;
             targetObject = targetObject.transform.GetChild(Random.Range(0, 3)).gameObject;
+        } else 
+        {
+            isFinalTarget = false;
         }
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
@@ -66,7 +71,7 @@ public class EnemyMovement : MonoBehaviour {
     IEnumerator setTarget()
     {
         yield return new WaitForSeconds(1);
-        agent.destination = target; 
+        agent.destination = target;
     }
 
     IEnumerator waitAtStand()
@@ -77,7 +82,7 @@ public class EnemyMovement : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (Vector3.Distance(transform.position, target) < 10)
+        if (Vector3.Distance(transform.position, target) < destinationRange)
         {
             if (isFinalTarget)
             {
@@ -85,7 +90,7 @@ public class EnemyMovement : MonoBehaviour {
                 Destroy(gameObject);
             } else
             {
-                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount)).GetChild(Random.Range(0,2)).position;
+                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount - 1)).GetChild(Random.Range(0,2)).position;
                 isFinalTarget = true;
                 StartCoroutine(waitAtStand());
             }

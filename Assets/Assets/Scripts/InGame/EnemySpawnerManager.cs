@@ -10,13 +10,15 @@ public class EnemySpawnerManager : MonoBehaviour {
 
     private void Start()
     {
-        DontDestroyOnLoad(transform.gameObject);
+        
+        //DontDestroyOnLoad(transform.gameObject);
         StartCoroutine(SpawnEnemysStart());
+        
     }
 
     IEnumerator SpawnEnemysStart()
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 0; i++)
         {
             SpawnEnemy();
             yield return new WaitForSeconds(0.5f);

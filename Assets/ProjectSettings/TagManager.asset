@@ -8,6 +8,8 @@ TagManager:
   - EnemySpawner
   - Stand
   - Spawner
+  - Gleis
+  - LoadingZoneManager
   layers:
   - Default
   - TransparentFX
