@@ -5276,6 +5276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 1315919025118936, guid: 45fd5f3209f18584daaa3a9c23612bb0, type: 2}
   sceneSize: {x: 531, y: 450}
+  enemyCount: 100
 --- !u!4 &1602051248
 Transform:
   m_ObjectHideFlags: 0

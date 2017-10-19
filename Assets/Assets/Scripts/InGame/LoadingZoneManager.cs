@@ -9,7 +9,6 @@ public class LoadingZoneManager : MonoBehaviour {
     public static int? loadingZoneId;
     public Image black;
     public Animator anim;
-    GameObject obj;
 
     private void Awake()
     {
@@ -17,7 +16,6 @@ public class LoadingZoneManager : MonoBehaviour {
         {
             loadingZoneId = 2;
         }
-        obj = gameObject;
     }
 
     public static void LoadScene(int zone, int scene)

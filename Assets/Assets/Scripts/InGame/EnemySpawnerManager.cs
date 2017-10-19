@@ -9,13 +9,14 @@ public class EnemySpawnerManager : MonoBehaviour {
     private int randomInt;
     private Vector3 randomPosition;
     public Vector2 sceneSize = new Vector2(531, 450);
+    public int enemyCount;
 
     private void Start()
     {
 
         //DontDestroyOnLoad(transform.gameObject);
         //StartCoroutine(SpawnEnemysStart());
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
             SpreadEnemy();
         }

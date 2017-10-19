@@ -195,7 +195,7 @@ public class PlayerBehav : MonoBehaviour {
         isInGame = false; 
         while (transform.localScale.x>0)
         {
-            transform.localScale = transform.localScale - new Vector3(0.01f, 0.01f, 0.01f);
+            transform.localScale = transform.localScale - new Vector3(Time.deltaTime, Time.deltaTime, Time.deltaTime);
             yield return null;
         }
 
