@@ -18,6 +18,7 @@ public class BuOptions : MonoBehaviour {
     IEnumerator Fading() {
         anim.SetBool("Fade", true);
         yield return new WaitUntil(() => black.color.a == 1);
+        yield return new WaitForSeconds(0.15f);
         SceneManager.LoadScene("OptionsMenu");
     }
 }

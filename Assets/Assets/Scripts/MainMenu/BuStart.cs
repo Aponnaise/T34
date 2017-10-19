@@ -18,7 +18,7 @@ public class BuStart : MonoBehaviour {
     IEnumerator Fading() {
         anim.SetBool("Fade", true);
         yield return new WaitUntil(() => black.color.a == 1);
-        yield return new WaitForSeconds(0.35f);
-        SceneManager.LoadScene("Frankfurt");
+        yield return new WaitForSeconds(0.15f);
+        SceneManager.LoadScene("LevelMenu");
     }
 }
