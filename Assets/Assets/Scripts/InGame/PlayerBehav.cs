@@ -5,24 +5,23 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlayerBehav : MonoBehaviour {
 
-    public float superSpeed = 4f;
-    public float speed = 20;
-    public Sprite Up;        
-    public Sprite Right;    
-    public Sprite Down;      
-    public Sprite Left;      
-    public Sprite UpLeft;    
-    public Sprite UpRight;   
-    public Sprite DownRight; 
-    public Sprite DownLeft;  
-    Vector2 position1 = new Vector2(0,0);  
-    Vector2 position2; 
-    float directionX; 
-    float directionY;
-    string spriteHelp;
-    bool isSuperSpeed = false;
-    bool onLoadingZone = true;
-    Vector3 leaveDirection;
+    public static float superSpeed = 4f;
+    public static float speed;
+    public Sprite Up;
+    public Sprite Right;
+    public Sprite Down;
+    public Sprite Left;
+    public Sprite UpLeft;
+    public Sprite UpRight;
+    public Sprite DownRight;
+    public Sprite DownLeft;
+    private Vector2 position1 = new Vector2(0,0);
+    private Vector2 position2;
+    private float directionX;
+    private float directionY;
+    private string spriteHelp;
+    public static bool isSuperSpeed = false;
+    private Vector3 leaveDirection;
 
     Vector3 startingPosition = new Vector3(0, 5.5f, -72);
 
@@ -40,7 +39,6 @@ public class PlayerBehav : MonoBehaviour {
         startingPosition = GameObject.FindGameObjectWithTag("LoadingZoneManager").transform.GetChild((int) LoadingZoneManager.loadingZoneId).position;
         startingPosition.y = 5.5f;
         transform.position = startingPosition;
-        onLoadingZone = true;
         StartCoroutine(spawnWalk());
     }
 
@@ -161,11 +159,6 @@ public class PlayerBehav : MonoBehaviour {
                 StartCoroutine(Die());
             }
 
-            if (hit.transform.parent.tag != "LoadingZoneManager" && onLoadingZone)
-            {
-                onLoadingZone = false;
-            }
-
             if (hit.transform.parent.tag == "LoadingZoneManager" && !leaveWalk)
             {
                 if (!isInSpawnWalk && Vector3.Dot(DirectionToVector(hit.transform.gameObject.GetComponent<LoadingZoneValues>().direction), moveVec) < 0)
@@ -176,11 +169,10 @@ public class PlayerBehav : MonoBehaviour {
             }
         }
         #endregion
-        Debug.Log(isSuperSpeed);
     }
 
-    void OnCollisionEnter(Collision col) {
-        if(col.gameObject.tag == "Enemy" && (isSuperSpeed || Input.GetKey(KeyCode.L))) {
+    private void OnCollisionEnter(Collision collision) {
+        if(collision.transform.gameObject.tag == "Enemy" && (isSuperSpeed || Input.GetKey(KeyCode.L))) {
             Debug.Log("Dies");
             //Die
             StartCoroutine(Die());

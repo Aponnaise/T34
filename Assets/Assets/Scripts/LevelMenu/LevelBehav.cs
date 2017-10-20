@@ -17,12 +17,12 @@ public class LevelBehav : MonoBehaviour {
     void OnMouseOver() {
         if(Input.GetMouseButtonDown(0)) {
             switch(levelName) {
-                case "1":
-                    //Variablen für das Level setzen
-                    break;
-                case "2":
-                    //Variablen für das Level setzen
-                    break;
+            case "1":
+                PlayerBehav.speed = 12;
+                break;
+            case "2":
+                //Variablen für das Level setzen
+                break;
 
             }
            
@@ -35,5 +35,9 @@ public class LevelBehav : MonoBehaviour {
         yield return new WaitUntil(() => black.color.a == 1);
         yield return new WaitForSeconds(0.15f);
         SceneManager.LoadScene("Frankfurt");
+    }
+
+    void ChangeVariables() {
+
     }
 }

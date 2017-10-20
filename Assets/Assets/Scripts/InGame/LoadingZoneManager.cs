@@ -37,6 +37,4 @@ public class LoadingZoneManager : MonoBehaviour {
         yield return new WaitForSeconds(0.15f);
         SceneManager.LoadScene(scene);
     }
-
-
 }
