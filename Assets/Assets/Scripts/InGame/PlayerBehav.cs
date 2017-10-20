@@ -175,8 +175,16 @@ public class PlayerBehav : MonoBehaviour {
                 }
             }
         }
-#endregion
+        #endregion
+        Debug.Log(isSuperSpeed);
+    }
 
+    void OnCollisionEnter(Collision col) {
+        if(col.gameObject.tag == "Enemy" && (isSuperSpeed || Input.GetKey(KeyCode.L))) {
+            Debug.Log("Dies");
+            //Die
+            StartCoroutine(Die());
+        }
     }
 
     void Direction(bool bool1, bool bool2, bool bool3, bool bool4, bool bool5, bool bool6, bool bool7, bool bool8) {
