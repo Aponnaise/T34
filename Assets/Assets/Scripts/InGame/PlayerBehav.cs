@@ -6,7 +6,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class PlayerBehav : MonoBehaviour {
 
     public static float superSpeed = 4f;
-    public static float speed;
+    public static float speed = 12f;
     public Sprite Up;
     public Sprite Right;
     public Sprite Down;
@@ -17,8 +17,8 @@ public class PlayerBehav : MonoBehaviour {
     public Sprite DownLeft;
     private Vector2 position1 = new Vector2(0,0);
     private Vector2 position2;
-    private float directionX;
-    private float directionY;
+    public float directionX;
+    public float directionY;
     private string spriteHelp;
     public static bool isSuperSpeed = false;
     private Vector3 leaveDirection;

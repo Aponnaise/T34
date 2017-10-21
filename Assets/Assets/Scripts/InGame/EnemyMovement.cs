@@ -5,12 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour {
 
-    Vector3 target;
-    NavMeshAgent agent;
-    Vector2 position1 = new Vector2(0,0), position2;
-    float directionX, directionY;
-    Animator animator;
-    SpriteRenderer spriteRenderer;
+    private GameObject target;
+    private GameObject player;
+    private GameObject enemyManager;
+    private NavMeshAgent agent;
+    private Vector2 position1 = new Vector2(0,0), position2;
+    private float directionX, directionY;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
     string spriteHelp;
     public Sprite Up;
     public Sprite Right;
@@ -24,12 +26,16 @@ public class EnemyMovement : MonoBehaviour {
 
     private int destinationRange = 30;
     private int safetyRange = 2;
+    private float despawnDistance = 60;
+    private float despawnSafety = 1f;
 
     private int ClassID = 0;
 
 
     private void Awake()
     {
+        enemyManager = GameObject.FindGameObjectWithTag("EnemySpawner");
+        player = GameObject.FindGameObjectWithTag("Player");
         ClassID = Random.Range(0, 4);
         animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
         spriteRenderer = transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>();   
@@ -39,7 +45,7 @@ public class EnemyMovement : MonoBehaviour {
         if (targetObject.tag == "Spawner")
         {
             isFinalTarget = true;
-            targetObject = targetObject.transform.GetChild(Random.Range(0, 3)).gameObject;
+            //targetObject = targetObject.transform.GetChild(Random.Range(0, 3)).gameObject;
         } else 
         {
             isFinalTarget = false;
@@ -64,15 +70,15 @@ public class EnemyMovement : MonoBehaviour {
                 break;
         }
         
-        target = targetObject.transform.position;
+        target = targetObject;
         agent.destination = targetObject.transform.position;
         StartCoroutine(setTarget());
 	}
 
     IEnumerator setTarget()
     {
-        yield return new WaitForSeconds(1);
-        agent.destination = target;
+        yield return new WaitForSeconds(0.02f);
+        agent.destination = target.transform.position;
     }
 
     IEnumerator waitAtStand()
@@ -83,7 +89,12 @@ public class EnemyMovement : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        if (new Vector2(transform.position.x - target.x, transform.position.z - target.z).magnitude < destinationRange && !isFinalTarget || new Vector2(transform.position.x - target.x, transform.position.z - target.z).magnitude < safetyRange && isFinalTarget)
+        if (new Vector2(transform.position.x - target.transform.position.x, transform.position.z - target.transform.position.z).magnitude < destinationRange && !isFinalTarget || new Vector2(transform.position.x - target.transform.position.x, transform.position.z - target.transform.position.z).magnitude < safetyRange && isFinalTarget
+            //|| Vector3.Distance(transform.position, player.transform.position) > despawnDistance)
+            || transform.position.x - despawnSafety > enemyManager.GetComponent<EnemySpawnerManager>().topRight.transform.position.x
+            || transform.position.z - despawnSafety > enemyManager.GetComponent<EnemySpawnerManager>().topRight.transform.position.z
+            || transform.position.x + despawnSafety < enemyManager.GetComponent<EnemySpawnerManager>().bottomLeft.transform.position.x
+            || transform.position.z + despawnSafety < enemyManager.GetComponent<EnemySpawnerManager>().bottomLeft.transform.position.z)
         {
             if (isFinalTarget)
             {
@@ -91,11 +102,14 @@ public class EnemyMovement : MonoBehaviour {
                 Destroy(gameObject);
             } else
             {
-                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount - 1)).GetChild(Random.Range(0,2)).position;
+                target = GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).GetChild(Random.Range(0, GameObject.FindGameObjectWithTag("EnemySpawner").transform.GetChild(0).childCount - 1)).GetChild(Random.Range(0,2)).gameObject;
                 isFinalTarget = true;
                 StartCoroutine(waitAtStand());
             }
             
+        } else
+        {
+            agent.destination = target.transform.position;
         }
 
         #region Animation
